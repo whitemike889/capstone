@@ -4,17 +4,25 @@ from bs4 import BeautifulSoup
 import re
 #import helpers
 #import sqlalchemy
-#TODO: Figure out how to hook this up to the regular db/etc methods as soon as possible
+
 
 def main():
-	#voldir = "/Users/asilva/CAP_Working_Data/versioning/shared/32044026226753_redacted"
-	casepath = "/Users/asilva/CAP_Working_Data/twovolz/32044026226753_redacted/casemets/32044026226753_redacted_CASEMETS_0007.xml"
-	map(open(casepath))
+	base_path = "/Users/asilva/CAP_Working_Data/twovolz/"
+	barcode = "32044026226753"
+	case_no = 7
+	version  = "redacted"
+	case_map(base_path, barcode, case_no, version)
 
 
-def map(case):
-	case_soup = BeautifulSoup( case, "xml")
-	alto_files = _get_alto_files(case_soup)
+def case_map(base_path, barcode, case_no, version):
+	
+	volume_path = "{}{}_{}/".format(base_path, barcode, version)
+	case_path = "{}/casemets/{}_{}_CASEMETS_{}.xml".format(volume_path, barcode, version, format(case_no, '04'))
+
+	case_soup = BeautifulSoup( open(case_path), "xml")
+
+	alto_files = _get_alto_files(case_soup, volume_path)
+
 	blocks = case_soup.find_all(TYPE="blocks")
 	case_soup = case_soup.find(USE="casebody")
 	case_id = case_soup.file['ID']
@@ -33,8 +41,9 @@ def map(case):
 
 
 
-def _get_alto_files(case_soup):
+def _get_alto_files(case_soup, volume_path):
 	'''
+
 		{'alto_00020_1': {'path': '../alto/32044026226753_redacted_ALTO_00020_1.xml', 'pgmap': '40'},
 		 'alto_00021_0': {'path': '../alto/32044026226753_redacted_ALTO_00021_0.xml', 'pgmap': '41'}}
 	'''
@@ -59,13 +68,17 @@ def _get_alto_files(case_soup):
 		alto_id = alto['ID']
 		path = alto.FLocat['xlink:href']
 		alto_map[alto_id]['path'] = path
-		alto_map[alto_id]['contents'] = _map_alto_file(path)
+		alto_map[alto_id]['contents'] = _map_alto_file(path.replace("../", volume_path))
 
 	return alto_map
 
 
-def _map_alto_file(path):
+def _map_alto_file(alto_path):
 	#TODO get the map words/lines/blocks/elements of the alto files 
+	alto_soup = BeautifulSoup( open(alto_path), "xml")
+
+	for text_block in alto_soup.find("PrintSpace"):
+		print(text_block.name)
 	return []
 
 def _get_case_string_fs():
