@@ -4,8 +4,9 @@ from django.contrib.auth import views as auth_views
 from rest_framework import routers, permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from django.conf.urls import url
 
-from capapi.views import api_views, user_views, doc_views, viz_views
+from capapi.views import api_views, user_views, doc_views, viz_views, browse_views
 from capapi.forms import LoginForm
 
 
@@ -63,4 +64,7 @@ urlpatterns = [
     ### bulk data ###
     path('bulk-access/download/<str:public_or_private>/<str:jur>/<str:filename>', user_views.bulk_download, name='bulk-download'),
     path('bulk-access/', user_views.bulk, name='bulk-data'),
+
+    ### case browser ###
+    url(r'^browse/', browse_views.index, name='index'),
 ]

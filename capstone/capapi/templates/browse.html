@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load pipeline %}
+{% block extra_head %}
+  {% stylesheet 'docs' %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js" integrity="sha256-TaLceMwjWRqe4yhbqPOJH6V7UGt5AvvdNfpaIXJWbFU=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha256-zVUlvIh3NEZRYa9X/qpNY8P1aBy0d4FrI7bhfZSZVwc=" crossorigin="anonymous" />
+{% endblock %}
+
+{% block title %} | Case Browser{% endblock %}
+
+{% block meta_description %}
+  The Caselaw Access Project API guide
+{% endblock %}
+
+
+{% block content %}
+
+
+    <div id="vapp">
+        <p>[[ message ]]</p>
+    </div>
+
+<script>
+new Vue({
+  el: '#vapp',
+    delimiters: ['[[', ']]'],
+  data: {
+    message: 'Hello Vue.js!'
+  }
+});
+/*
+fetch('http://example.com/movies.json')
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(myJson) {
+    console.log(myJson);
+  });*/
+</script>
+{% endblock %}
